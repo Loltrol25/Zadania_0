@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant user
+    participant browser
+    participant server
+
+    user->>browser: Wpisuje treść notatki i klika Save (event submit)
+
+    Note right of browser: Przeglądarka zapobiega domyślnej akcji (przeładowaniu strony) i wysyła notatkę
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
+    activate server
+    Note right of server: Serwer zapisuje nową notatkę do listy.
+    server-->>browser: Przekierowanie do /notes (kod 302 Found)
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate server
+    server-->>browser: Nowy HTML document (zawierający nową notatkę)
+    deactivate server
+
+    Note right of browser: Przeglądarka ładuje nowy HTML, który renderuje zaktualizowaną listę notatek (i wykonuje resztę ładowania: CSS, JS, JSON).
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server-->>browser: the css file
+    deactivate server
